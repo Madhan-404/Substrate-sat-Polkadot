@@ -7,7 +7,7 @@ fn main() {
 
     let y = {
         let x_squared = x * x;
-        let x_cube = x_squared * x;
+        let x_cube = &x_squared * x;
 
         // This expression will be assigned to `y`
         x_cube + x_squared + x
@@ -18,9 +18,9 @@ fn main() {
         2 * x;
     };
 
-    println!("x is {:?}", x);
-    println!("y is {:?}", y);
-    println!("z is {:?}", z);
+    println!("x is {:?}", x);     //5
+    println!("y is {:?}", y);    //155
+    println!("z is {:?}", z);    //0
 }
 ```
 
@@ -31,7 +31,7 @@ fn main() {
 fn main() {
    let v = {
        let mut x = 1;
-       x += 2
+       x += 2;  //adding ; here returns 3 else it returns ()
    };
 
    assert_eq!(v, 3);
@@ -44,7 +44,10 @@ fn main() {
 ```rust,editable
 
 fn main() {
-   let v = (let x = 3);
+   let v = (
+    let x = 3
+    return x  //added this line
+    );
 
    assert!(v == 3);
 
@@ -63,8 +66,9 @@ fn main() {
 }
 
 fn sum(x: i32, y: i32) -> i32 {
-    x + y;
+    return (x + y)
 }
 ```
+
 
 > You can find the solutions [here](https://github.com/sunface/rust-by-practice)(under the solutions path), but only use it when you need it

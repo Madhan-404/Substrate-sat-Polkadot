@@ -11,7 +11,7 @@ fn main() {
     assert_eq!(size_of_val(&c1),1); 
 
     let c2 = '中';
-    assert_eq!(size_of_val(&c2),3); 
+    assert_eq!(size_of_val(&c2),1); 
 
     println!("Success!");
 } 
@@ -31,6 +31,7 @@ fn print_char(c : char) {
 }
 ```
 
+
 ### Bool
 3. 🌟
 ```rust, editable
@@ -39,7 +40,7 @@ fn print_char(c : char) {
 fn main() {
     let _f: bool = false;
 
-    let t = true;
+    let t = false;
     if !t {
         println!("Success!");
     }
@@ -52,12 +53,13 @@ fn main() {
 // Make it work
 fn main() {
     let f = true;
-    let t = true && false;
+    let t = true || false; // Using or instead of and
     assert_eq!(t, f);
 
     println!("Success!");
 }
 ```
+
 
 
 ### Unit type
@@ -69,7 +71,7 @@ fn main() {
     let _v: () = ();
 
     let v = (2, 3);
-    assert_eq!(v, implicitly_ret_unit());
+    assert_eq!(_v, implicitly_ret_unit());  //using a different variable to match no returns
 
     println!("Success!");
 }
@@ -91,7 +93,7 @@ fn explicitly_ret_unit() -> () {
 use std::mem::size_of_val;
 fn main() {
     let unit: () = ();
-    assert!(size_of_val(&unit) == 4);
+    assert!(size_of_val(&unit) == 0);  //as () takes 0 memory
 
     println!("Success!");
 }

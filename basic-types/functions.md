@@ -12,7 +12,7 @@ fn main() {
     println!("Success!");
 }
 
-fn sum(x, y: i32) {
+fn sum(x, y: i32) -> i32 {  //The function should give i32 to compare
     x + y;
 }
 ```
@@ -25,7 +25,7 @@ fn main() {
 }
 
 // Replace i32 with another type
-fn print() -> i32 {
+fn print() -> () {
    println!("Success!");
 }
 ```
@@ -44,7 +44,7 @@ fn main() {
 
 fn never_return() -> ! {
     // Implement this function, don't modify the fn signatures
-    
+    panic!("Println wont work now") //Panic avoids println!("Failed!");
 }
 ```
 
@@ -74,7 +74,7 @@ fn get_option(tp: u8) -> Option<i32> {
 
 // IMPLEMENT this function in THREE ways
 fn never_return_fn() -> ! {
-    
+    panic!() // Panic is added
 }
 ```
 
@@ -83,7 +83,7 @@ fn never_return_fn() -> ! {
 
 fn main() {
     // FILL in the blank
-    let b = __;
+    let b = false; //If true the match statement gets completed and the statement will be printed (on line 97)
 
     let v = match b {
         true => 1,

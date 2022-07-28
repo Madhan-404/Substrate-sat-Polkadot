@@ -13,14 +13,14 @@ fn drink(beverage: &str) {
     if beverage == "lemonade" {
         println!("Success!");
         // IMPLEMENT the below code
-        __
+        panic!("drinking  something else !");   //added panic statement
      }
 
     println!("Exercise Failed if printing out this line!");
 }
 
 fn main() {
-    drink(__);
+    drink("lemonade");
 
     println!("Exercise Failed if printing out this line!");
 }
@@ -34,15 +34,15 @@ fn main() {
     assert_eq!("abc".as_bytes(), [96, 97, 98]);
 
     let v = vec![1, 2, 3];
-    let ele = v[3];
+    let ele = v[2];
     // unwrap may panic when get return a None
-    let ele = v.get(3).unwrap();
+    let ele = v.get(2).unwrap();
 
     // Sometimes, the compiler is unable to find the overflow errors for you in compile time ,so a panic will occur
     let v = production_rate_per_hour(2);
 
     // because of the same reason as above, we have to wrap it in a function to make the panic occur
-    divide(15, 0);
+    divide(15, 1);
 
     println!("Success!")
 }

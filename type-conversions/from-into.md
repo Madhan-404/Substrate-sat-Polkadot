@@ -41,7 +41,7 @@ fn main() {
     let i3: i32 = 'a'.into();
 
     // FIX the error in two ways
-    let s: String = 'a' as String;
+    let s: String = 'a'.into();   
 
     println!("Success!")
 }
@@ -61,14 +61,17 @@ struct Number {
 
 impl From<i32> for Number {
     // IMPLEMENT `from` method
+    fn from(item: i32) -> Self {
+        Number { value: item }
+    }
 }
 
 // FILL in the blanks
 fn main() {
-    let num = __(30);
+    let num = Number::from(30);
     assert_eq!(num.value, 30);
 
-    let num: Number = __;
+    let num: Number = 30.into();
     assert_eq!(num.value, 30);
 
     println!("Success!")
@@ -89,10 +92,16 @@ enum CliError {
 
 impl From<io::Error> for CliError {
     // IMPLEMENT from method
+    fn from(error: io::Error) -> Self {
+        CliError::IoError(error)
+    }
 }
 
 impl From<num::ParseIntError> for CliError {
     // IMPLEMENT from method
+    fn from(error: num::ParseIntError) -> Self {
+        CliError::ParseError(error)
+    }
 }
 
 fn open_and_parse_file(file_name: &str) -> Result<i32, CliError> {
@@ -124,7 +133,7 @@ fn main() {
 
     // Into trait has a method `into`,
     // hence TryInto has a method ?
-    let n: u8 = match n.__() {
+    let n: u8 = match n.try_into() {
         Ok(n) => n,
         Err(e) => {
             println!("there is an error when converting: {:?}, but we catch it", e.to_string());
@@ -132,7 +141,7 @@ fn main() {
         }
     };
 
-    assert_eq!(n, __);
+    assert_eq!(n, 0);
 
     println!("Success!")
 }
@@ -162,9 +171,9 @@ fn main() {
 
     // FILL in the blanks
     let result: Result<EvenNum, ()> = 8i32.try_into();
-    assert_eq!(result, __);
+    assert_eq!(result, Ok(EvenNum(8)));
     let result: Result<EvenNum, ()> = 5i32.try_into();
-    assert_eq!(result, __);
+    assert_eq!(result, Err(()));
 
     println!("Success!")
 }

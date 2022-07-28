@@ -40,7 +40,7 @@ impl Bird for Swan {
 
 fn main() {
     // FILL in the blank.
-    let duck = __;
+    let duck = Duck;                      //--complete the blank --
     duck.swim();
 
     let bird = hatch_a_bird(2);
@@ -59,9 +59,62 @@ fn main() {
 }   
 
 // IMPLEMENT this function.
-fn hatch_a_bird...
-
+fn hatch_a_bird(type: i32) -> Box<dyn Bird> {
+    match type {
+        1 => Box::new(Swan),
+        2 => Box::new(Duck),
+        _ => panic!("Unknown bird type"),
+    }
+}
 ```
+<!-- []: # ```rust,editable
+[]: # 
+[]: # trait Bird {
+[]: #     fn quack(&self) -> String;
+[]: # }
+[]: # 
+[]: # struct Duck;
+[]: # impl Duck {
+[]: #     fn swim(&self) {
+[]: #         println!("Look, the duck is swimming")
+[]: #     }
+[]: # }
+[]: # struct Swan;
+[]: # impl Swan {
+[]: #     fn fly(&self) {
+[]: #         println!("Look, the duck.. oh sorry, the swan is flying")
+[]: #     }
+[]: # }
+[]: # 
+[]: # impl Bird for Duck {
+[]: #     fn quack(&self) -> String{
+[]: #         "duck duck".to_string()
+[]: #     }
+[]: # }
+[]: # 
+[]: # impl Bird for Swan {
+[]: #     fn quack(&self) -> String{
+[]: #         "swan swan".to_string()
+[]: #     }
+[]: # }
+[]: # 
+[]: # fn main() {
+[]: #     // FILL in the blank.
+[]: #     let duck = Duck;                      //--complete the blank --
+[]: #     duck.swim();
+[]: # 
+[]: #     let bird = hatch_a_bird(2);
+[]: #     // This bird has forgotten how to swim, so below line will cause an error.
+[]: #     // bird.swim();
+[]: #     // But it can quak.
+[]: #     assert_eq!(bird.quack(), "duck duck");
+[]: # 
+[]: #     let bird = hatch_a_bird(1);
+[]: #     // This bird has forgotten how to
+    
+} -->
+<!-- 
+``` -->
 ## Array with trait objects
 2. 🌟🌟
 ```rust,editable 
@@ -96,7 +149,7 @@ impl Bird for Swan {
 
 fn main() {
     // FILL in the blank to make the code work.
-    let birds __;
+    let birds: [Box<dyn Bird>; 2] = [Box::new(Duck{}), Box::new(Swan{})];  //--completed this line--
 
     for bird in birds {
         bird.quack();
@@ -135,7 +188,7 @@ fn main() {
     let y = 8u8;
 
     // Draw x.
-    draw_with_box(__);
+    draw_with_box(Box::new(x));   //--complete the blank--
 
     // Draw y.
     draw_with_ref(&y);
@@ -147,7 +200,7 @@ fn draw_with_box(x: Box<dyn Draw>) {
     x.draw();
 }
 
-fn draw_with_ref(x: __) {
+fn draw_with_ref(x: &dyn Draw) {   // --complete function with dyn keyword--
     x.draw();
 }
 ```
@@ -175,10 +228,14 @@ impl Foo for String {
 }
 
 // IMPLEMENT below with generics.
-fn static_dispatch...
+fn static_dispatch<T:Foo>(x:T) {
+    x.method();
+}                                                       //--complete the generics and trait objects implementation--
 
 // Implement below with trait objects.
-fn dynamic_dispatch...
+fn dynamic_dispatch(x:&dyn Foo) {
+    x.method();
+}
 
 fn main() {
     let x = 5u8;
@@ -207,20 +264,20 @@ trait MyTrait {
 }
 
 impl MyTrait for u32 {
-    fn f(&self) -> Self { 42 }
+    fn f(&self) -> u32 { 42 }  //--Change the return type to u32--
 }
 
-impl MyTrait for String {
-    fn f(&self) -> Self { self.clone() }
+impl MyTrait for String {   
+    fn f(&self) -> String { self.clone() }    //--changed the return type to String--
 }
 
 fn my_function(x: Box<dyn MyTrait>)  {
     x.f()
 }
-
+                                                
 fn main() {
-    my_function(Box::new(13_u32));
-    my_function(Box::new(String::from("abc")));
+    my_function(13_u32);                          //changed the input values to u32--
+    my_function(String::from("abc"));               //changed the input values to String--
 
     println!("Success!");
 }

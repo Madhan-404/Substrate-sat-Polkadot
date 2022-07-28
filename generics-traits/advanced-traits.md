@@ -17,17 +17,19 @@ Using of `Address` is much more clearer and convenient than `AsRef<[u8]> + Clone
 struct Container(i32, i32);
 
 // USING associated types to re-implement trait Contains.
-// trait Contains {
-//    type A;
-//    type B;
+trait Contains {
+   type A;
+   type B;
 
-trait Contains<A, B> {
-    fn contains(&self, _: &A, _: &B) -> bool;
+    fn contains(&self, _: &Self::A, _: &Self::B) -> bool;
     fn first(&self) -> i32;
     fn last(&self) -> i32;
 }
 
-impl Contains<i32, i32> for Container {
+impl Contains for Container {
+
+    Type A = i32;  //--Removed the generic type `i32` from the trait and mentioned the types from Contains --
+    Type B = i32;
     fn contains(&self, number_1: &i32, number_2: &i32) -> bool {
         (&self.0 == number_1) && (&self.1 == number_2)
     }
@@ -38,7 +40,7 @@ impl Contains<i32, i32> for Container {
     fn last(&self) -> i32 { self.1 }
 }
 
-fn difference<A, B, C: Contains<A, B>>(container: &C) -> i32 {
+fn difference<C: Contains>(container: &C) -> i32 {   //--removed type A and B from the trait and mentioned the types from Contains--
     container.last() - container.first()
 }
 
@@ -74,7 +76,7 @@ struct Point<T> {
 
 // FILL in the blank in three ways: two of them use the default generic  parameters, the other one not.
 // Notice that the implementation uses the associated type `Output`.
-impl __ {
+impl <T: Sub<Output = T>> Sub for Point<T> {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self::Output {
@@ -182,10 +184,10 @@ impl Human {
 fn main() {
     let person = Human;
 
-    assert_eq!(__, "This is your captain speaking.");
-    assert_eq!(__, "Up!");
+    assert_eq!(Pilot::fly(&person) , "This is your captain speaking.");      //--Filled up the blanks with the correct trait--
+    assert_eq!(Wizard::fly(&person), "Up!");
 
-    assert_eq!(__, "*waving arms furiously*");
+    assert_eq!(person.fly(), "*waving arms furiously*");
 
     println!("Success!");
 }
@@ -235,7 +237,29 @@ struct CSStudent {
 }
 
 // IMPLEMENT the necessary traits for CSStudent to make the code work
-impl ...
+impl person for CSStudent {
+    fn name(&self) -> String {
+        self.name.clone()
+    }
+}
+
+impl Student for CSStudent {
+    fn university(&self) -> String {
+        self.university.clone()
+    }
+}
+                                                            //   --implemented impl for every trait in the list--
+impl Programmer for CSStudent {
+    fn fav_language(&self) -> String {
+        self.fav_language.clone()
+    }
+}
+
+impl CompSciStudent for CSStudent {
+    fn git_username(&self) -> String {
+        self.git_username.clone()
+    }
+}
 
 fn main() {
     let student = CSStudent {
@@ -246,7 +270,7 @@ fn main() {
     };
 
     // FILL in the blank
-    println!("{}", comp_sci_student_greeting(__));
+    println!("{}", comp_sci_student_greeting(&student));
 }
 ```
 
@@ -262,7 +286,7 @@ It’s possible to get around this restriction using the newtype pattern, which 
 use std::fmt;
 
 // DEFINE a newtype `Pretty` here
-
+struct Pretty(String);                            //--Added the `String` type to the struct and created a newtype--
 
 impl fmt::Display for Pretty {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

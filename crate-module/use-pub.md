@@ -3,7 +3,7 @@
 
 ```rust,editable
 use std::fmt::Result;
-use std::io::Result;
+use std::io::Result as IoResult;
 
 fn main() {}
 ```
@@ -14,7 +14,7 @@ fn main() {}
 
 // FILL in the blank in two ways
 // DON'T add new code line
-use std::collections::__;
+use std::collections::*;
 
 fn main() {
     let _c1:HashMap<&str, i32> = HashMap::new();
@@ -31,6 +31,8 @@ fn main() {
     assert_eq!(hello_package::hosting::seat_at_table(), "sit down please");
      assert_eq!(hello_package::eat_at_restaurant(),"yummy yummy!");
 }
+
+pub use crate::front_of_house::hosting;  //to be added in lib.rs
 ```
 
 

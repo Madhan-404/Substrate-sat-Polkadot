@@ -46,7 +46,8 @@ edition = "2021"
 /* FILL in the blank with your ANSWER */
 
 // Q: Whats the difference between package 1# and 2# ?
-// A: __
+// A: The crate root is different between package 1# and 2#.      //initial has a binary while the later is a library.
+```
 ```
 
 
@@ -62,7 +63,9 @@ Similar to `hello-package`, `hello-package1` also has a crate in it, however, th
 /* FILL in the blank with your ANSWER */
 
 // Q: Whats the name of the library crate in package `hello-package1`?
-// A: __
+// A: The name of the library crate is `hello-package1`. 
+```
+```
 ```
 
 
@@ -73,8 +76,8 @@ Similar to `hello-package`, `hello-package1` also has a crate in it, however, th
 ├── Cargo.lock
 ├── Cargo.toml
 ├── src
-│   ├── __
-│   └── __
+│   ├── main.rs
+│   └── lib.rs
 ```
 
 After this step, there should be two crates in package `hello-package`: **a binary crate and a library crate, both with the same name as the package**.
@@ -90,11 +93,12 @@ After this step, there should be two crates in package `hello-package`: **a bina
 ├── Cargo.toml
 ├── Cargo.lock
 ├── src
-│   ├── __
-│   ├── __
-│   └── __
-│       └── __
-│       └── __
+│   ├── main.rs
+│   ├── lib.rs
+│   └── bin
+│       └── main1.rs    //--Completed the blanks--
+│       └── main2.rs
+```
 ├── tests # directory for integrated tests files
 │   └── some_integration_tests.rs
 ├── benches # dir for benchmark files

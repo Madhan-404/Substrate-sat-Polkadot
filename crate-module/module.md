@@ -29,10 +29,25 @@ library crate root
 
 ```rust,editable
 // FILL in the blank
-// in __.rs
+// in lib.rs
 
 mod front_of_house {
     // IMPLEMENT this module..
+    mod hosting {
+        fn add_to_waitlist() {}
+
+        fn seat_at_table() {}
+    }
+
+    mod serving {
+        fn take_order() {}
+
+        fn serve_order() {}
+
+        fn take_payment() {}
+
+        fn complain() {} 
+    }
 }
 ```
 
@@ -44,16 +59,28 @@ mod front_of_house {
 
 // FILL in the blanks and FIX the errors
 // You need make something public with `pub` to provide accessiblity for outside code `fn eat_at_restaurant()`
-mod front_of_house {
+pub mod front_of_house {
     /* ...snip... */
+    pub mod hosting {
+        pub fn add_to_waitlist() {}                //--mod is private by Default, so we need to make it public with `pub`--
+
+        pub fn seat_at_table() {}
+    }
+
+    pub mod serving {
+        pub fn take_order() {}
+        pub fn serve_order() {}
+        pub fn take_payment() {}
+         fn complain() {}
+    }
 }
 
 pub fn eat_at_restaurant() {
     // call add_to_waitlist with **absolute path**:
-    __.add_to_waitlist();
+    crate::front_of_house::hosting::add_to_waitlist();
 
     // call with **relative path** 
-     __.add_to_waitlist();
+     crate::front_of_house::hosting::add_to_waitlist();
 }
 ```
 
@@ -67,7 +94,7 @@ mod back_of_house {
         // FILL in the blank in tree ways
         //1. using keyword `super`
         //2. using absolute path
-        __.serve_order();
+        super::front_of_house::serving::serve_order();
     }
 
     fn cook_order() {}
@@ -136,12 +163,28 @@ pub mod back_of_house {
 // in src/lib.rs
 
 // IMPLEMENT...
+mod front_of_house;
+mod back_of_house;
+pub fn eat_at_restaurant() -> String {
+    front_of_house::hosting::add_to_waitlist();super::front_of_house::serving::serve_order();
+
+    back_of_house::cook_order();
+
+    String::from("yummy yummy!")
+}
 ```
 
 ```rust,editable
 // in src/back_of_house.rs
 
 // IMPLEMENT...
+use crate::front_of_house;
+pub fn fix_incorrect_order() {
+    cook_order();
+    front_of_house::serving::serve_order();
+}
+
+pub fn cook_order() {}
 ```
 
 
@@ -155,12 +198,24 @@ pub mod back_of_house {
 // in src/front_of_house/hosting.rs
 
 // IMPLEMENT...
+pub mod hosting;
+pub mod serving;
 ```
 
 ```rust,editable
 // in src/front_of_house/serving.rs
 
+
 // IMPLEMENT...
+
+pub fn take_order() {}
+
+pub fn serve_order() {}
+
+pub fn take_payment() {}
+
+fn complain() {} 
+
 ```
 
 ### accessing code in library crate from binary crate
@@ -187,8 +242,8 @@ You should have below structures and the corresponding codes in them when reachi
 
 // FILL in the blank and FIX the errors
 fn main() {
-    assert_eq!(__, "sit down please");
-    assert_eq!(__,"yummy yummy!");
+    assert_eq!(front_of_house::hosting::seat_at_table(), "sit down please");
+    assert_eq!(hello_package::eat_at_restaurant(),"yummy yummy!");
 }
 ```
 

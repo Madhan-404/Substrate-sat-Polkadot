@@ -9,11 +9,11 @@
 // 1. Don't use `to_string()`
 // 2. Don't add/remove any code line
 fn main() {
-    let mut s: String = "hello, ";
-    s.push_str("world".to_string());
-    s.push(__);
+    let mut s: String = String::from("hello,");    
+    s.push_str("world");                                 //.to owned is removed
+    s.push('!');
 
-    move_ownership(s);
+    move_ownership(s.clone());      // move_ownership takes ownership of s, so clone is needed
 
     assert_eq!(s, "hello, world!");
 
@@ -36,13 +36,13 @@ A `String` is stored as a vector of bytes (`Vec<u8>`), but guaranteed to always 
 fn main() {  
    let mut s = String::from("hello, world");
 
-   let slice1: &str = __; // In two ways
+   let slice1: &str = &s;  
    assert_eq!(slice1, "hello, world");
 
-   let slice2 = __;
+   let slice2 = &s[0..5];          //this statememt only compares till the 5th index
    assert_eq!(slice2, "hello");
 
-   let slice3: __ = __; 
+   let slice3: &mut String = &mut s;; 
    slice3.push('!');
    assert_eq!(slice3, "hello, world!");
 
@@ -53,8 +53,8 @@ fn main() {
 3. 🌟🌟
 ```rust,editable
 
-// Question: how many heap allocations are happening here?
-// Your answer: 
+// Question: how many heap allocations are happening here?  
+// Your answer: 2  (to_string and &str)
 fn main() {  
     // Create a String type based on `&str`
     // The type of string literals is `&str`
@@ -87,14 +87,14 @@ Indexing is intended to be a constant-time operation, but UTF-8 encoding does no
 // FILL in the blank and FIX errors
 fn main() {
     let s = String::from("hello, 世界");
-    let slice1 = s[0]; //tips: `h` only takes 1 byte in UTF8 format
+    let slice1 = s[0..1]; //tips: `h` only takes 1 byte in UTF8 format
     assert_eq!(slice1, "h");
 
-    let slice2 = &s[3..5]; // Tips: `中`  takes 3 bytes in UTF8 format
+    let slice2 = &s[..10]; // Tips: `中`  takes 3 bytes in UTF8 format
     assert_eq!(slice2, "世");
     
     // Iterate through all chars in s
-    for (i, c) in s.__ {
+    for (i, c) in s.chars().enumerate() {    //.enumerate() returns (index, char), .chars() returns iterator of chars
         if i == 7 {
             assert_eq!(c, '世')
         }
@@ -128,13 +128,13 @@ fn main() {
 // FILL in the blanks
 fn main() {
     let mut s = String::new();
-    __;
+    s.push_str("hello, world!");
 
     // Some bytes, in a vector
     let v = vec![104, 101, 108, 108, 111];
 
     // Turn a byte's vector into a String
-    let s1 = __;
+    let s1 = String::from_utf8(v).unwrap();
     
     
     assert_eq!(s, s1);
@@ -157,7 +157,7 @@ The pointer points to an internal buffer String uses to store its data. The leng
 // 25
 // Here, there’s no need to allocate more memory inside the loop.
 fn main() {
-    let mut s = String::new();
+    let mut s = String::with_capacity(25);    // --create a String with capacity 25--
 
     println!("{}", s.capacity());
 
@@ -182,9 +182,9 @@ fn main() {
     // Prevent automatically dropping of the String's data
     let mut story = mem::ManuallyDrop::new(story);
 
-    let ptr = story.__();
-    let len = story.__();
-    let capacity = story.__();
+    let ptr = story.as_mut_ptr();
+    let len = story.len();
+    let capacity = story.capacity();
 
     assert_eq!(16, len);
 

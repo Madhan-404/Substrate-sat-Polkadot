@@ -41,11 +41,13 @@ fn main() {
 
 /* Make it work, only using comments! */
 fn main() {
-    todo!();
+/*    todo!();
     unimplemented!();
 
     assert_eq!(6, 5 + 3 + 2 + 1 )
+*/
 }
+
 ```
 
 

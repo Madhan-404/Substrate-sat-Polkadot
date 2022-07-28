@@ -18,7 +18,7 @@ correctness at compile time.
 fn main() {
     let s1 = "hello";
     /* Fill in the blank */
-    let s = format!(__);
+    let s = format!("{}, world!", s1);
     assert_eq!(s, "hello, world!");
 }
 ```
@@ -32,8 +32,8 @@ fn main() {
    Hello world, I am 
    Sunface!
    */
-   __("hello world, ");
-   __("I am");
-   __("Sunface!");
+   print!("hello world, ");
+   println!("I am");
+   println!("Sunface!");
 }
 ```

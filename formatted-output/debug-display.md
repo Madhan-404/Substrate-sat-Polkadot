@@ -26,9 +26,9 @@ struct Structure(i32);
 
 fn main() {
     // Types in std and Rust have implemented the fmt::Debug trait
-    println!("__ months in a year.", 12);
+    println!("{?} months in a year.", 12);
 
-    println!("Now __ will print!", Structure(3));
+    println!("Now {?} will print!", Structure(3));
 }
 ```
 
@@ -49,18 +49,24 @@ fn main() {
         age: 18,
     }
     */
-    println!("{:?}", person);
+    println!("{:#?}", person);
 }
 ```
 
 3. 🌟🌟 We can also manually implement `Debug` trait for our types
 ```rust,editable
 
-#[derive(Debug)]
+use std::fmt;
+
 struct Structure(i32);
 
-#[derive(Debug)]
+
 struct Deep(Structure);
+
+impl fmt::Debug for Deep {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}", self.0.0)
+    }
 
 
 fn main() {    
@@ -92,11 +98,16 @@ struct Point2D {
 
 impl fmt::Display for Point2D {
     /* Implement.. */
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Display: {} + {}i", self.x, self.y)
+    }
 }
 
 impl fmt::Debug for Point2D {
     /* Implement.. */
-}
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Debug: Complex {{ real: {:?}, imag: {:?} }}", self.x, self.y)
+    }
 
 fn main() {
     let point = Point2D { x: 3.3, y: 7.2 };
@@ -136,7 +147,7 @@ impl fmt::Display for List {
             // For every element except the first, add a comma.
             // Use the ? operator to return on errors.
             if count != 0 { write!(f, ", ")?; }
-            write!(f, "{}", v)?;
+            write!(f, "{}",count, v)?;                        //added count here
         }
 
         // Close the opened bracket and return a fmt::Result value.

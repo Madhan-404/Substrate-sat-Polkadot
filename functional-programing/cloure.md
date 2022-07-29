@@ -47,14 +47,14 @@ Closures can capture variables by borrowing or moving. But they prefer to captur
 fn main() {
     let color = String::from("green");
 
-    let print = move || println!("`color`: {}", color);
+    let print = || println!("`color`: {}", color);     //removed move here
 
     print();
     print();
 
     // `color` can be borrowed immutably again, because the closure only holds
     // an immutable reference to `color`. 
-    let _reborrow = &color;
+    // let _reborrow = &color;
 
     println!("{}",color);
 }
@@ -69,7 +69,7 @@ fn main() {
 fn main() {
     let mut count = 0;
 
-    let mut inc = || {
+    let mut inc = move || {                    //added move here
         count += 1;
         println!("`count`: {}", count);
     };
@@ -102,7 +102,7 @@ fn main() {
      };
 
      consume();
-     consume();
+    //  consume();
 }
 
 fn take<T>(_v: T) {}
@@ -115,10 +115,15 @@ fn main() {
 
      let consume = move || {
          println!("`movable`: {:?}", movable);
+         take(&movable);
      };
 
      consume();
      consume();
+}
+
+fn take<T>(_v: &T) {
+
 }
 ```
 
@@ -140,7 +145,7 @@ fn main() {
     let s = example_closure(String::from("hello"));
 
     /* Make it work, only changeg the following line */
-    let n = example_closure(5);
+    let n = example_closure(String::from("5"));                              //changed the type to String
 }
 ```
 
@@ -156,7 +161,7 @@ When taking a closure as an input parameter, the closure's complete type must be
 /* Make it work by change the trait bound, in two ways*/
 fn fn_once<F>(func: F)
 where
-    F: FnOnce(usize) -> bool,
+    F: Fn(usize) -> bool,   //changed the trait bound to Fn(usize) -> bool 
 {
     println!("{}", func(3));
     println!("{}", func(4));
@@ -181,7 +186,7 @@ fn main() {
 }
 
 /* Fill in the blank */
-fn exec<'a, F: __>(mut f: F)  {
+fn exec<'a,  F: FnMut(&'a str)>(mut f: F)  {
     f("hello")
 }
 ```
@@ -206,7 +211,7 @@ This is because if a move is possible, then any type of borrow should also be po
 // <F> denotes that F is a "Generic type parameter"
 fn apply<F>(f: F) where
     // The closure takes no input and returns nothing.
-    F: __ {
+    F: FnOnce() {
 
     f();
 }
@@ -296,7 +301,7 @@ fn main() {
     exec(update_string);
 }
 
-fn exec<'a, F: __>(mut f: F) {
+fn exec<'a, F: FnOnce(&'a str) -> String>(mut f: F) {              //filled the blank
     f("hello");
 }
 ```
@@ -309,7 +314,7 @@ Since closure maybe used as arguments, you might wonder can we use functions as 
 ```rust,editable
 
 /* Implement `call_me` to make it work */
-fn call_me {
+fn call_me<F: Fn()>(f: F) {
     f();
 }
 
@@ -332,7 +337,7 @@ Returning a closure is much harder than you may thought of.
 ```rust,editable
 /* Fill in the blank using two approches,
  and fix the errror */
-fn create_fn() -> __ {
+fn create_fn() -> impl Fn(i32) -> i32  {
     let num = 5;
 
     // how does the following closure capture the evironment variable `num`
@@ -350,7 +355,7 @@ fn main() {
 11、🌟🌟
 ```rust,editable
 /* Fill in the blank and fix the error*/
-fn factory(x:i32) -> __ {
+fn factory(x:i32) -> Box<dyn Fn(i32) -> i32> {
 
     let num = 5;
 

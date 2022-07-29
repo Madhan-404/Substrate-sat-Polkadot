@@ -28,8 +28,8 @@ fn main() {
 /* Refactoring the following code using iterators */
 fn main() {
     let arr = [0; 10];
-    for i in 0..arr.len() {
-        println!("{}",arr[i])
+    for i in arr {
+        println!("{}",i)
     }
 }
 ```
@@ -39,7 +39,7 @@ fn main() {
 /* Fill in the blank */
 fn main() {
     let mut v = Vec::new();
-    for n in __ {
+    for n in 1..101 {
        v.push(n);
     }
 
@@ -68,9 +68,9 @@ Using two ways if possible */
 fn main() {
     let v1 = vec![1, 2];
 
-    assert_eq!(v1.next(), __);
-    assert_eq!(v1.next(), __);
-    assert_eq!(v1.next(), __);
+    assert_eq!(v1.next(),Some(1));
+    assert_eq!(v1.next(), Some(2));
+    assert_eq!(v1.next(), None);
 }
 ```
 
@@ -88,7 +88,7 @@ In the previous section, we have mentioned that `for` will apply the `into_iter`
 /* Make it work */
 fn main() {
     let arr = vec![0; 10];
-    for i in arr {
+    for i in arr.iter() {   //added iter to iterate over each element
         println!("{}", i)
     }
 
@@ -102,7 +102,7 @@ fn main() {
 fn main() {
     let mut names = vec!["Bob", "Frank", "Ferris"];
 
-    for name in names.__{
+    for name in names.iter_mut() {
         *name = match name {
             &mut "Ferris" => "There is a rustacean among us!",
             _ => "Hello",
@@ -118,10 +118,10 @@ fn main() {
 /* Fill in the blank */
 fn main() {
     let mut values = vec![1, 2, 3];
-    let mut values_iter = values.__;
+    let mut values_iter = values.iter_mut();
 
-    if let Some(v) = values_iter.__{
-        __
+    if let Some(v) = values_iter.next() {
+        *v=0;
     }
 
     assert_eq!(values, vec![0, 2, 3]);
@@ -183,7 +183,14 @@ impl Iterator for Fibonacci {
     type Item = u32;
     
     /* Implement next method */
-    fn next(&mut self)
+    fn next(&mut self) -> Option<Self::Item> {
+        let new_next = self.curr + self.next;
+
+        self.curr = self.next;
+        self.next = new_next;
+
+        Some(self.curr)
+    }
 }
 
 // Returns a Fibonacci sequence generator
@@ -219,7 +226,7 @@ fn main() {
     // The sum method will take the ownership of the iterator and iterates through the items by repeatedly calling next method
     let total = v1_iter.sum();
 
-    assert_eq!(total, __);
+    assert_eq!(total, 6);
 
     println!("{:?}, {:?}",v1, v1_iter);
 }
@@ -241,7 +248,7 @@ fn main() {
 
     let v1: Vec<i32> = vec![1, 2, 3];
 
-    let v2 = v1.iter().collect();
+    let v2 = v1.into_iter().collect();    //iter to into iter
 
     assert_eq!(v2, vec![1, 2, 3]);
 }
@@ -272,7 +279,7 @@ use std::collections::HashMap;
 fn main() {
     let names = ["sunface", "sunfei"];
     let ages = [18, 18];
-    let folks: HashMap<_, _> = names.into_iter().__.collect();
+    let folks: HashMap<_, _> = names.into_iter().map(|x| x + 1).collect();
 
     println!("{:?}",folks);
 }
@@ -291,7 +298,7 @@ struct Shoe {
 }
 
 fn shoes_in_size(shoes: Vec<Shoe>, shoe_size: u32) -> Vec<Shoe> {
-    shoes.into_iter().__.collect()
+    shoes.into_iter().filter(|s| s.size == shoe_size).collect()
 }
 
 fn main() {
